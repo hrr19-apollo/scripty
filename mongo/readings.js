@@ -8,3 +8,4 @@ var readingSchema = mongoose.Schema({
 var Readings = mongoose.model("Readings", readingSchema);
 
 module.exports = Readings;
+//This is a test.
