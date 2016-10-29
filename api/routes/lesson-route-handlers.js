@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
-const ObjId = mongoose.Types.ObjectId;
-
 const Lesson = require('../data/models/lesson');
-const Reading = require('../data/models/reading');
-const Problem = require('../data/models/problem');
+const Content = require('../data/models/content');
+
+const ObjId = mongoose.Types.ObjectId;
 
 const log = require('../helpers/log');
 const send500 = require('../helpers/send500');
@@ -28,23 +27,14 @@ exports.getLessonById = (req, res) => {
     result.lessonInfo = lessonInfo;
     result.lessonContent = [];
 
-    Problem.find({lessonId: ObjId(id)}, (err, problems) => {
-      if (err || !problems) {
-        log.error('Error retrieving problems.');
+    Content.find({lessonId: ObjId(id)}, (err, content) => {
+      if (err || !content) {
+        log.error('Error retrieving content.');
         return;
       }
-      result.lessonContent.push(...problems);
-
-      Reading.find({lessonId: ObjId(id)}, (err, readings) => {
-        if (err || !readings) {
-          log.error('Error retrieving readings.');
-          return;
-        }
-        result.lessonContent.push(...readings);
-
-        log.info('Successfully submitted lesson.');
-        res.status(200).json(result);
-      });
+      result.lessonContent.push(...content);
+      log.info('Successfully submitted lesson.');
+      res.status(200).json(result);
     });
   });
 };
@@ -61,19 +51,14 @@ exports.createLesson = (req, res) => {
 
   new Lesson({title, description})
     .save((err, lesson) => {
-      content.map((item, index) => {
+      content.forEach((item, index) => {
         // NOTE: This is a very hacky way to determine if a piece of content
         // is a probem, rather than a reading. A more robust method of
         // determining this will become necessary, I'm almost certain.
         if (item.order === undefined) { item.order = index; }
 
-        if (item.choices) {
-          new Problem(item)
-            .save(err => err ? log.error(err) : null);
-        } else {
-          new Reading(item)
-            .save(err => err ? log.error(err) : null);
-        }
+        new Content(item)
+          .save(err => err ? log.error(err) : null);
       });
     });
 
@@ -81,27 +66,11 @@ exports.createLesson = (req, res) => {
 };
 
 exports.updateLessonById = (req, res) => {
-
+  const id = req.params.id;
+  //TODO(Mitch): Fill me in!
 };
+
 exports.deleteLessonById = (req, res) => {
   const id = req.params.id;
+  //TODO(Mitch): Fill me in!
 };
-
-exports.getUsers = (req, res) => {};
-exports.getUserById = (req, res) => {
-  const id = req.params.id;
-  const {name, email, password} = req.body;
-
-  Lesson.update({id: ObjId(id)}, {name, email, password}, (err) => {
-    if (err) {
-      send500(res, err);
-    } else {
-      res.status(201).send({name, email});
-    }
-  });
-};
-
-exports.createUser = (req, res) => {};
-exports.updateUserById = (req, res) => {};
-exports.deleteUserById = (req, res) => {};
-
