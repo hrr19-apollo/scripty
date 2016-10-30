@@ -41,7 +41,7 @@ class Lesson extends Component {
       name:routeName,
       passProps: {
         numberCorrect: this.state.numberCorrect,
-        numberIncorrect: this.state.numberIncorrect
+        numberIncorrect: this.state.numberIncorrect, 
       }
     });
   }
