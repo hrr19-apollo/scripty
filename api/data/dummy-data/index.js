@@ -11,6 +11,11 @@ const Content = require('../models/content');
  * dummy data.
  **/
 
+// This is a little bit of a dirty fix to dry up the code.
+// In essence, it's the same as doing a `err => if (err) log.error(err);`
+// but actually conforms to our linting rules.
+const handleErr = err => err ? log.error(err) : undefined;
+
 const createdLesson = new Lesson({
   title: 'First Lesson',
   description: 'Welcome to Javascript!',
@@ -26,11 +31,7 @@ const createdLesson = new Lesson({
     text: 'JavaScript can "display" data in different ways: \n Writing into an alert box, using window.alert(). \n Writing into the HTML output using document.write(). \n Writing into an HTML element, using innerHTML. \nWriting into the browser console, using console.log().',
     lessonId: mongoose.Types.ObjectId(lesson._id)
   })
-  .save(err => {
-    if (err) {
-      log.error(err);
-    }
-  });
+  .save(handleErr);
 
   new Content({
     order: 1,
@@ -40,11 +41,7 @@ const createdLesson = new Lesson({
     answer: 'console.log',
     lessonId: mongoose.Types.ObjectId(lesson._id)
   })
-  .save(err => {
-    if (err) {
-      log.error(err);
-    }
-  });
+  .save(handleErr);
 
   new Content({
     order: 2,
@@ -54,11 +51,7 @@ const createdLesson = new Lesson({
     answer: 'true',
     lessonId: mongoose.Types.ObjectId(lesson._id)
   })
-  .save(err => {
-    if (err) {
-      log.error(err);
-    }
-  });
+  .save(handleErr);
 
   new Content({
     order: 3,
@@ -66,11 +59,7 @@ const createdLesson = new Lesson({
     text: 'JavaScript variables are containers for storing data values. \n All JavaScript variables must be identified with unique names. \n These unique names are called identifiers. \n Identifiers can be short names (like x and y) or more descriptive names (age, sum, totalVolume).',
     lessonId: mongoose.Types.ObjectId(lesson._id)
   })
-  .save(err => {
-    if (err) {
-      log.error(err);
-    }
-  });
+  .save(handleErr);
 
   new Content({
     order: 4,
@@ -80,11 +69,7 @@ const createdLesson = new Lesson({
     answer: 'var',
     lessonId: mongoose.Types.ObjectId(lesson._id)
   })
-  .save(err => {
-    if (err) {
-      log.error(err);
-    }
-  });
+  .save(handleErr);
 
   new Content({
     order: 5,
@@ -92,11 +77,7 @@ const createdLesson = new Lesson({
     text: 'A JavaScript function is a block of code designed to perform a particular task. \n A JavaScript function is executed when "something" invokes it (calls it). \n A JavaScript function is defined with the function keyword, followed by a name, followed by parentheses ().',
     lessonId: mongoose.Types.ObjectId(lesson._id)
   })
-  .save(err => {
-    if (err) {
-      log.error(err);
-    }
-  });
+  .save(handleErr);
 
   new Content({
     order: 6,
@@ -106,11 +87,7 @@ const createdLesson = new Lesson({
     answer: 'var, function',
     lessonId: mongoose.Types.ObjectId(lesson._id)
   })
-  .save(err => {
-    if (err) {
-      log.error(err);
-    }
-  });
+  .save(handleErr);
 
   new Content({
     order: 7,
@@ -120,11 +97,7 @@ const createdLesson = new Lesson({
     answer: 'object',
     lessonId: mongoose.Types.ObjectId(lesson._id)
   })
-  .save(err => {
-    if (err) {
-      log.error(err);
-    }
-  });
+  .save(handleErr);
 
 }); // End of Lesson
 
