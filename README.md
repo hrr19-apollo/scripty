@@ -101,13 +101,11 @@ These routes currently exist to cover the width and breadth of CRUD actions. As 
 |          | /api/lessons       | POST   | JSON         | Create a new lesson in the db.                                  |
 |          | /api/lessons/:id   | PUT    | JSON         | Update an existing lesson with `id`, if it exists.              |
 |          | /api/lessons/:id   | DELETE | empty        | Delete an existing lesson with `id`, if it exists.              |
-|:--------:|:------------------:|:------:|:------------:|:---------------------------------------------------------------:|
 |          | /api/users         | GET    | empty        |                                                                 |
 |          | /api/users/:id     | GET    | empty        |                                                                 |
 |          | /api/users         | POST   | JSON         |                                                                 |
 |          | /api/users/:id     | PUT    | JSON         |                                                                 |
 |          | /api/users/:id     | DELETE | empty        |                                                                 |
-|:--------:|:------------------:|:------:|:------------:|:---------------------------------------------------------------:|
 |          | /api/content/:type | GET    | empty        |                                                                 |
 |          | /api/content/:id   | GET    | empty        |                                                                 |
 |          | /api/content       | POST   | JSON         |                                                                 |
