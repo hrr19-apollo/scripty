@@ -7,30 +7,55 @@ const log = require('../helpers/log');
 const send500 = require('../helpers/send500');
 const send404 = require('../helpers/send404');
 
-exports.getUsers = (req, res) => {};
-
-// TODO(Mitch): Needs testing.
-exports.getUserById = (req, res) => {
-  const id = req.params.id;
-  const {name, email, password} = req.body;
-
-  Lesson.update({id: ObjId(id)}, {name, email, password}, (err) => {
-    if (err) {
-      send500(res, err);
-    } else {
-      res.status(201).send({name, email});
-    }
-  });
+exports.getUsers = (req, res) => {
+  User.find({})
+    .then((err, res) => {
+      if (err) {
+        log.error(err);
+        res.status(500).send(err);
+      } else {
+        res.status(200).send(users);
+      }
+    });
 };
 
-exports.createUser = (req, res) => {};
+exports.getUserById = (req, res) => {
+  User.findById(req.params.id)
+    .then(user => { res.status(200).send(user); });
+};
+
+exports.createUser = (req, res) => {
+  const {username, password, email} = req.body;
+
+  User.findOne({name})
+    .then(user => {
+      if (!user) {
+        //TODO: Insertion code
+      } else {
+        res.status(403).send(`Name collision with username \`${name}\``);
+      }
+    });
+};
 
 exports.updateUserById = (req, res) => {
   const id = req.params.id;
-  //TODO(Mitch): Fill me in!
+
 };
 
 exports.deleteUserById = (req, res) => {
   const id = req.params.id;
-  //TODO(Mitch): Fill me in!
+
+};
+
+exports.signinUser = (req, res) => {
+  const {username, password} = req.body;
+
+  User.findOne({name: username})
+    .then(user => {
+      if (user) {
+        
+      } else {
+        send404(res, '');
+      }
+    });
 };

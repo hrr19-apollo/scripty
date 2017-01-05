@@ -8,6 +8,9 @@ const userHandlers = require('./routes/user-route-handlers');
 const log = require('./helpers/log');
 const db = require('./data/config');
 
+const authenticationRequired =
+  require('./helpers/auth.js')(process.env.JWT_SECRET || 'scripty');
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -27,24 +30,31 @@ app.use((req, res, next) => {
 });
 
 // Define routes
-app.get('/api/lessons', lessonHandlers.getAllLessons);
-app.get('/api/lessons/:id', lessonHandlers.getLessonAndContentsById);
-app.post('/api/lessons', lessonHandlers.createLesson);
-app.put('/api/lessons/:id', lessonHandlers.updateLessonById);
-app.delete('/api/lessons/:id', lessonHandlers.deleteLessonById);
+app.get('/lessons', lessonHandlers.getAllLessons);
+app.get('/lessons/:id', lessonHandlers.getLessonAndContentsById);
+app.post('/lessons', lessonHandlers.createLesson);
+app.put('/lessons/:id', lessonHandlers.updateLessonById);
+app.delete('/lessons/:id', lessonHandlers.deleteLessonById);
 
-app.get('/api/users', userHandlers.getUsers);
-app.get('/api/users/:id', userHandlers.getUserById);
-app.post('/api/users', userHandlers.createUser);
-app.put('/api/users/:id', userHandlers.updateUserById);
-app.delete('/api/users/:id', userHandlers.deleteUserById);
+app.get('/users', authenticationRequired, userHandlers.getUsers);
+app.get('/users/:id', authenticationRequired, userHandlers.getUserById);
+app.post('/users', authenticationRequired, userHandlers.createUser);
+app.put('/users/:id', authenticationRequired, userHandlers.updateUserById);
+app.delete('/users/:id', authenticationRequired, userHandlers.deleteUserById);
+app.get('/signin', userHandlers.signinUser);
 
-app.get('/api/content/:type', contentHandlers.getContentByType);
-app.get('/api/content/:id', contentHandlers.getContentById);
-app.post('/api/content', contentHandlers.createContent);
-app.put('/api/content/:id', contentHandlers.updateContentById);
-app.delete('/api/content/:id', contentHandlers.deleteContentById);
+app.get('/content/:type', contentHandlers.getContentByType);
+app.get('/content/:id', contentHandlers.getContentById);
+app.post('/content', contentHandlers.createContent);
+app.put('/content/:id', contentHandlers.updateContentById);
+app.delete('/content/:id', contentHandlers.deleteContentById);
 
 app.listen(process.env.PORT || 3011, () => {
   log.info(`Listening on port ${process.env.PORT || 3011}.`);
+});
+
+const u = require('util');
+
+app.all('*', (...args) => {
+  log.info('Request fell through.', ...[args.map(arg => u.inspect(arg))]);
 });
